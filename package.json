@@ -1,0 +1,24 @@
+{
+  "name": "chess-counting-trainer",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/iainlimeuan/chess-counting-trainer#readme",
+  "bugs": {
+    "url": "https://github.com/iainlimeuan/chess-counting-trainer/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iainlimeuan/chess-counting-trainer.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@chrisoakman/chessboardjs": "^1.0.0",
+    "chess.js": "^1.4.0"
+  }
+}
