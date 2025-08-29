@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Counting Tactics Trainer</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      background: #f8f8f8;
+    }
+    #board {
+      margin: 20px auto;
+      width: 400px;
+    }
+    .input-box {
+      margin: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    #result {
+      font-weight: bold;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Counting Tactics Trainer</h1>
+  <div id="board"></div>
+
+  <div class="input-box">
+    <label for="answer">What is the material change? (e.g., +1 for White, -3 for Black, 0)</label><br>
+    <input type="text" id="answer" />
+    <button onclick="checkAnswer()">Submit</button>
+  </div>
+
+  <div id="result"></div>
+
+  <!-- Chess libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.12.0/chess.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.js"></script>
+
+  <script>
+    // Initialize chess logic + board
+    const game = new Chess();
+
+    // Example position (White knight can capture e5 pawn, Black recaptures)
+    // FEN = Forsyth-Edwards Notation, describes chess positions
+    const startFEN = "rnbqkbnr/pppppppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2";
+    game.load(startFEN);
+
+    const board = Chessboard('board', {
+      position: startFEN
+    });
+
+    // Define the tactic sequence
+    const moves = ["Nxe5", "d6xe5"];  // White captures pawn, Black recaptures
+
+    // Piece values for counting
+    const values = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+
+    function countMaterial(chess) {
+      let sum = 0;
+      chess.board().flat().forEach(piece => {
+        if (piece) {
+          const val = values[piece.type];
+          sum += piece.color === 'w' ? val : -val;
+        }
+      });
+      return sum;
+    }
+
+    const beforeMaterial = countMaterial(game);
+
+    // Play out the sequence
+    moves.forEach(move => game.move(move));
+    const afterMaterial = countMaterial(game);
+
+    const netChange = afterMaterial - beforeMaterial; 
+    // > 0 means White is ahead, < 0 means Black is ahead
+
+    function checkAnswer() {
+      const userAnswer = document.getElementById("answer").value.trim();
+      let correct = "";
+      if (netChange > 0) correct = `+${netChange} for White`;
+      else if (netChange < 0) correct = `${netChange} for Black`;
+      else correct = "0 (Even)";
+
+      const resultBox = document.getElementById("result");
+      if (userAnswer === correct) {
+        resultBox.textContent = "✅ Correct! The change is " + correct;
+        resultBox.style.color = "green";
+      } else {
+        resultBox.textContent = "❌ Incorrect. The correct answer is " + correct;
+        resultBox.style.color = "red";
+      }
+    }
+  </script>
+
+</body>
+</html>
