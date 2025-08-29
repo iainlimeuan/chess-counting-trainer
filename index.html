@@ -1,8 +1,10 @@
+<!-- HTML Boilerplate -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Chess Counting Trainer</title>
+  <!-- Chessboard.js and Chess.js CDNs -->
   <link rel="stylesheet"
         href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css"
         integrity="sha384-q94+BZtLrkL1/ohfjR8c6L+A6qzNH9R2hBLwyoAfu3i/WCvQjzL2RQJ3uNHDISdU"
@@ -15,35 +17,56 @@
           crossorigin="anonymous"></script>  
   <script src="https://unpkg.com/chess.js@1.4.0/dist/cjs/chess.js"></script>
 
+  <!-- Local CSS and Javascript -->
+  <link rel="stylesheet" href="styles.css">
+  <script src="scripts/randompuzzle.js"></script>
 </head>
 
+<!-- BODY -->
 <body>
-  <div id="myBoard" style="width: 400px"></div>
-  <script>
-    var board = null
-    var config = {
-      pieceTheme: 'img/wikipedia/{piece}.png',
-      position: 'start'
-    }
-    var game = new Chess()
+  <!--Title -->
+  <h1>Chess Counting Trainer</h1>
+  <!-- Board Container-->
+  <div id="myBoard"></div>
+  
+  <!-- Material Analysis Display -->
+  <div id="material-display">
+    <h3>Material Analysis</h3>
+    <div class="material-grid">
+      <div class="material-section">
+        <strong>Start of Puzzle:</strong><br>
+        White: <span id="start-white">0</span> pts<br>
+        Black: <span id="start-black">0</span> pts
+      </div>
+      <div class="material-section">
+        <strong>After Solution:</strong><br>
+        White: <span id="end-white">0</span> pts<br>
+        Black: <span id="end-black">0</span> pts
+      </div>
+    </div>
+    <div class="material-divider">
+      <strong>Material Differences:</strong><br>
+      White: <span id="diff-white" class="material-diff neutral">0 pts</span><br>
+      Black: <span id="diff-black" class="material-diff neutral">0 pts</span>
+    </div>
+  </div>
 
-    function makeRandomMove () {
-      var possibleMoves = game.moves()
-
-      // exit if the game is over
-      if (game.isGameOver()) return
-
-      var randomIdx = Math.floor(Math.random() * possibleMoves.length)
-      game.move(possibleMoves[randomIdx])
-      board.position(game.fen())
-
-      window.setTimeout(makeRandomMove, 500)
-    }
-
-    board = Chessboard('myBoard', config)
-
-    window.setTimeout(makeRandomMove, 500)
-  </script>
+  <!-- Move Navigation Controls -->
+  <div id="navigation-controls">
+    <h3>Move Navigation</h3>
+    <div class="button-group">
+      <button id="btn-start" onclick="goToStart()" class="btn btn-start">Start</button>
+      <button id="btn-prev" onclick="previousMove()" class="btn btn-prev">Previous</button>
+      <button id="btn-next" onclick="nextMove()" class="btn btn-next">Next</button>
+      <button id="btn-end" onclick="goToEnd()" class="btn btn-end">End</button>
+    </div>
+    <div id="move-info">
+      Position: Starting position
+    </div>
+    <div class="help-text">
+      You can also drag pieces to make moves (illegal moves will snap back)
+    </div>
+  </div>
 
 </body>
 </html>
